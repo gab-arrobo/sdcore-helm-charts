@@ -447,6 +447,33 @@ Render init container that builds a CA bundle with system roots plus the shared 
 {{- end -}}
 
 {{/*
+Render trust-store environment variables for runtimes using the default system CA loader.
+*/}}
+{{- define "5g-control-plane.certs_env" -}}
+- name: SSL_CERT_FILE
+  value: /etc/ssl/certs/ca-certificates.crt
+- name: SSL_CERT_DIR
+  value: /etc/ssl/certs
+{{- end -}}
+
+{{/*
+Render volume mounts for leaf certs plus standard trust-store locations.
+*/}}
+{{- define "5g-control-plane.certs_volume_mounts" -}}
+- name: certs
+  mountPath: /var/run/certs
+  readOnly: true
+- name: certs
+  mountPath: /etc/ssl/certs/ca-certificates.crt
+  subPath: ca-bundle.crt
+  readOnly: true
+- name: certs
+  mountPath: /etc/ssl/cert.pem
+  subPath: ca-bundle.crt
+  readOnly: true
+{{- end -}}
+
+{{/*
 Render pod template annotations that trigger a rollout when mounted cert sources change.
 */}}
 {{- define "5g-control-plane.certs_pod_annotations" -}}

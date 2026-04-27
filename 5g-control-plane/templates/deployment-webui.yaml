@@ -54,8 +54,7 @@ spec:
         - name: GIN_MODE
           value: release
       {{- end }}
-        - name: SSL_CERT_FILE
-          value: /var/run/certs/ca-bundle.crt
+{{ tuple "webui" . | include "5g-control-plane.certs_env" | indent 8 }}
         imagePullPolicy: {{ .Values.images.pullPolicy }}
       {{ if .Values.config.coreDump.enabled }}
         securityContext:
@@ -71,9 +70,7 @@ spec:
         volumeMounts:
         - name: nf-config
           mountPath: /opt
-        - name: certs
-          mountPath: /var/run/certs
-          readOnly: true
+{{ tuple "webui" . | include "5g-control-plane.certs_volume_mounts" | indent 8 }}
       {{- if .Values.config.coreDump.enabled }}
         - name: coredump
           mountPath: /tmp/coredump
