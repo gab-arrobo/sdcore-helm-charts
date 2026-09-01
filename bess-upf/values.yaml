@@ -123,6 +123,7 @@ config:
         max_sessions: 50000
         table_sizes:
           pdrLookup: 50000
+          flowMeasure: 200000
           appQERLookup: 200000
           sessionQERLookup: 100000
           farLookup: 150000
